@@ -10,6 +10,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.StatusEffectSpriteManager;
@@ -58,9 +59,9 @@ public abstract class InGameHudMixin {
 //
 //    @Shadow protected abstract void drawTextBackground(MatrixStack matrixStack, TextRenderer textRenderer, int i, int j, int k);
 
-    @Shadow
-    @Final
-    private static Identifier PUMPKIN_BLUR;
+//    @Shadow
+//    @Final
+//    private static Identifier PUMPKIN_BLUR;
 
     private static final Identifier INVENTORY_TEXTURE = Identifier.ofVanilla("textures/gui/container/inventory.png");
             //new Identifier("textures/gui/container/inventory.png");
@@ -115,9 +116,9 @@ public abstract class InGameHudMixin {
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     float f = 1.0F;
                     if (statusEffectInstance.isAmbient()) {
-                        context.drawTexture(INVENTORY_TEXTURE, k, l, 165, 166, 24, 24);
+                        context.drawTexture((a) -> RenderLayer.getGui(), null, k, l, 0F, 0F, 165, 166, 24, 24);
                     } else {
-                        context.drawTexture(INVENTORY_TEXTURE, k, l, 141, 166, 24, 24);
+                        context.drawTexture((a) -> RenderLayer.getGui(), INVENTORY_TEXTURE, k, l, 0F, 0F, 141, 166, 24, 24);
                         if (statusEffectInstance.getDuration() <= 200) {
                             int m = 10 - statusEffectInstance.getDuration() / 20;
                             f = MathHelper.clamp(
@@ -135,7 +136,8 @@ public abstract class InGameHudMixin {
                     list.add(() -> {
                         RenderSystem.setShaderTexture(0, sprite.getAtlasId());
                         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, finalF);
-                        context.drawSprite(finalK + 3, finalL + 3, 0, 18, 18, sprite);
+                        //1.20.4 // context.drawSprite(finalK + 3, finalL + 3, 0, 18, 18, sprite);
+                        context.drawSpriteStretched((a) -> RenderLayer.getGui(), sprite, finalK + 3, finalL + 3, 18, 18, 0);
 
                         Text time = StatusEffectUtil.getDurationText(statusEffectInstance, 1.0F, 20);
                         MultilineText.create(textRenderer, time).drawWithShadow(context, finalK, finalL + 25, 1, 8355711);
