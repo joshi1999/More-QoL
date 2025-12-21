@@ -1,8 +1,8 @@
 {
   "key.more_features_id.options": "Apri More QoL Optionen",
-  "key.more_features_id.addTime": "Ora Locale +",
-  "key.more_features_id.removeTime": "Ora Locale -",
-  "key.more_features_id.localTime": "Ora Locale attiva: ",
+  "key.more_features_id.addTime": "Ora fissa +",
+  "key.more_features_id.removeTime": "Ora fissa -",
+  "key.more_features_id.localTime": "Ora fissa attiva: ",
   "key.categories.more_features_id": "More QoL",
   "features.more_features_id.title": "More QoL",
   "options.more_features_id.breakSafe":"Salvataggio utensile: ",

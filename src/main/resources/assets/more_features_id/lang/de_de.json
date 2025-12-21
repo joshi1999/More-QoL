@@ -1,8 +1,8 @@
 {
   "key.more_features_id.options": "Öffne More QoL Optionen",
-  "key.more_features_id.addTime": "Lokalzeit +",
-  "key.more_features_id.removeTime": "Lokalzeit -",
-  "key.more_features_id.localTime": "Lokalzeit aktiv: ",
+  "key.more_features_id.addTime": "Fix Zeit +",
+  "key.more_features_id.removeTime": "Fix Zeit -",
+  "key.more_features_id.localTime": "Fix Zeit aktiv: ",
   "key.categories.more_features_id": "More QoL",
   "features.more_features_id.title": "More QoL",
   "options.more_features_id.breakSafe":"Item Bruchschutz: ",
