@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Implementation of various Item operations in the inventory
  */
-@Mixin(HandledScreen.class)
+/*@Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen implements ScreenHandlerProvider<T> {
     @Shadow
     protected abstract boolean handleHotbarKeyPressed(int keyCode, int scanCode);
@@ -127,3 +127,4 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
 //    }
 
 }
+*/

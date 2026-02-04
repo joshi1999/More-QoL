@@ -14,7 +14,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.StatusEffectSpriteManager;
+//import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
@@ -36,7 +36,7 @@ import java.util.List;
 /**
  * Displaying of the status effect overlay
  */
-@Mixin(InGameHud.class)
+/*@Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 
     @Shadow
@@ -121,3 +121,4 @@ public abstract class InGameHudMixin {
     }
 
 }
+*/

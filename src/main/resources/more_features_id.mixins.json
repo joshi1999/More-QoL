@@ -7,12 +7,10 @@
 
   ],
   "client": [
+    "BeaconBlockEntityRendererMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientWorldPropertiesMixin",
-    "HandledScreenMixin",
-    "InGameHudMixin",
-    "GameOptionsMixin",
-    "BeaconBlockEntityRendererMixin"
+    "GameOptionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
