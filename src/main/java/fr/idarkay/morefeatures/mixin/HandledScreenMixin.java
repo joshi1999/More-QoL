@@ -1,10 +1,12 @@
 package fr.idarkay.morefeatures.mixin;
 
 import fr.idarkay.morefeatures.FeaturesClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen implements ScreenHandlerProvider<T> {
     @Shadow
-    protected abstract boolean handleHotbarKeyPressed(int keyCode, int scanCode);
+    protected abstract boolean handleHotbarKeyPressed(KeyInput keyInput);
 
     @Shadow
     @Nullable
@@ -50,17 +52,17 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
     }
 
     @Overwrite
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (super.keyPressed(keyCode, scanCode, modifiers)) {
+    public boolean keyPressed(KeyInput keyInput) {
+        if (super.keyPressed(keyInput)) {
             return true;
-        } else if (keyCode != 256 && !this.client.options.inventoryKey.matchesKey(keyCode, scanCode)) {
-            this.handleHotbarKeyPressed(keyCode, scanCode);
+        } else if (keyInput.getKeycode() != 256 && !this.client.options.inventoryKey.matchesKey(keyInput)) {
+            this.handleHotbarKeyPressed(keyInput);
             if (this.focusedSlot != null && this.focusedSlot.hasStack()) {
-                if (this.client.options.pickItemKey.matchesKey(keyCode, scanCode)) {
+                if (this.client.options.pickItemKey.matchesKey(keyInput)) {
                     this.onMouseClick(this.focusedSlot, this.focusedSlot.id, 0, SlotActionType.CLONE);
-                } else if (this.client.options.dropKey.matchesKey(keyCode, scanCode)) {
-                    boolean control = hasControlDown();
-                    if (hasShiftDown() && control) {
+                } else if (this.client.options.dropKey.matchesKey(keyInput)) {
+                    boolean control = keyInput.hasCtrlOrCmd();
+                    if (keyInput.hasShift() && control) {
                         Item focusedType = this.focusedSlot.getStack().getItem();
                         if (!focusedType.equals(Items.AIR)) {
                             for (Slot slot : handler.slots) {
@@ -80,50 +82,26 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
         }
     }
 
-    @Inject(method = "mouseDragged(DDIDD)Z", at = @At("TAIL"))
-    public void mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY,
-                             CallbackInfoReturnable<Boolean> cir) {
-        if ((button == 0 || button == 1) && hasShiftDown()
+    @Inject(method = "mouseDragged", at = @At("TAIL"))
+    public void mouseDragged(Click click, double offsetX, double offsetY, CallbackInfoReturnable<Boolean> cir) {
+        if ((click.button() == 0 || click.button() == 1) && click.hasShift()
                 && this.client.player.currentScreenHandler.getCursorStack().isEmpty()) {
-            Slot slot = this.getSlotAt(mouseX, mouseY);
+            Slot slot = this.getSlotAt(click.x(), click.y());
             if (slot != null && !slot.getStack().isEmpty()) {
-                this.onMouseClick(slot, slot.id, button, SlotActionType.QUICK_MOVE);
+                this.onMouseClick(slot, slot.id, click.button(), SlotActionType.QUICK_MOVE);
             }
         }
     }
 
-    @Inject(method = "drawSlot(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/screen/slot/Slot;)V",
-            at = @At("RETURN"))
-    private void drawSlot(DrawContext context, Slot slot, CallbackInfo ci) {
-//        final boolean maj = (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT));
+    @Inject(method = "drawSlot", at = @At("RETURN"))
+    private void drawSlot(DrawContext context, Slot slot, int mouseX, int mouseY, CallbackInfo ci) {
         final ItemStack cursor = this.handler.getCursorStack();
         final ItemStack slotIT = slot.getStack();
         if ((FeaturesClient.options().lightSameItem && !slotIT.isEmpty()
                 && !cursor.isEmpty()
                 && slot.getStack().getItem().equals(cursor.getItem()))
-//                ||  (maj && !slotIT.isEmpty() && this.focusedSlot != null
-//                    && !this.focusedSlot.getStack().isEmpty()
-//                    && this.focusedSlot.getStack().getItem().equals(slotIT.getItem()))
         ) {
             context.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, FeaturesClient.options().getLightSameItemColor());
         }
     }
-
-//    @Inject(method = "drawItem(Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At("HEAD"))
-//    private void drawItem(ItemStack stack, int x, int y, String amountText, CallbackInfo ci) {
-//
-//        final boolean maj = (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT) || InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_SHIFT));
-//        final ItemStack cursor = this.handler.getCursorStack();
-//        if ((FeaturesClient.options().lightSameItem && !stack.isEmpty()
-//                && !cursor.isEmpty()
-//                && stack.getItem().equals(cursor.getItem()))
-//                ||  (maj && !stack.isEmpty() && this.focusedSlot != null
-//                && !this.focusedSlot.getStack().isEmpty()
-//                && this.focusedSlot.getStack().getItem().equals(stack.getItem()))
-//        )
-//        {
-//            fill(RenderSystem.getModelViewStack(), x, y, x + 16, y + 16, FeaturesClient.options().getLightSameItemColor());
-//        }
-//    }
-
 }

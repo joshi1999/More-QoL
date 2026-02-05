@@ -1,5 +1,6 @@
 package fr.idarkay.morefeatures;
 
+import fr.idarkay.morefeatures.features.HudRenderer;
 import fr.idarkay.morefeatures.options.FeaturesGameOptions;
 import fr.idarkay.morefeatures.options.Options;
 import fr.idarkay.morefeatures.options.screen.FeaturesOptionsScreen;
@@ -7,6 +8,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -37,6 +40,7 @@ public class FeaturesClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         Registry.register(Registries.SOUND_EVENT, FeaturesClient.BREAK_SAFE_ID, BREAK_SAFE_EVENT);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of(MOD_ID, "before_chat"), new HudRenderer()::render);
         KeyBindings.init();
 
         startClientTickEvents();
