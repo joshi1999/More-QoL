@@ -9,9 +9,10 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 import java.util.logging.Logger;
 
-
+/**
+ * Renders remaining effect time under the effect icons
+ */
 public class HudRenderer {
-    // Render the remaining time of the effect in the hud, directly under the effect which is shown.
     public void render(DrawContext drawContext, RenderTickCounter renderTickCounter) {
         if (!FeaturesClient.options().effectTime) {
             return;
@@ -21,11 +22,10 @@ public class HudRenderer {
         if (client.currentScreen instanceof InventoryScreen) {
             return;
         }
-        // Get the beneficialEffects collection to determine icon size
+
         boolean hasEffects = !client.player.getStatusEffects().isEmpty();
         if (!hasEffects) return;
 
-        // Icon size is 24 for small icons, 32 for large icons (when ambient effects are shown)
         int iconSize = 24;
         int x = drawContext.getScaledWindowWidth() - iconSize;
         int y = 1;
@@ -40,11 +40,9 @@ public class HudRenderer {
 
             String timeText = String.format("%d:%02d", minutes, seconds);
 
-            // Calculate text width and center it under the icon
             int textWidth = client.textRenderer.getWidth(timeText);
             int centeredX = x + (iconSize - textWidth) / 2;
 
-            // Draw text directly below the icon
             drawContext.drawText(client.textRenderer, timeText, centeredX, y + iconSize + 2, 0xFFFFFFFF, true);
 
             x -= (iconSize + 2);

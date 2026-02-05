@@ -10,7 +10,8 @@
     "BeaconBlockEntityRendererMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientWorldPropertiesMixin",
-    "GameOptionsMixin"
+    "GameOptionsMixin",
+    "HandledScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
