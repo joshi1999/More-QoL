@@ -4,7 +4,7 @@
   "package": "fr.idarkay.morefeatures.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-
+    "PlayerInventoryMixin"
   ],
   "client": [
     "BeaconBlockEntityRendererMixin",

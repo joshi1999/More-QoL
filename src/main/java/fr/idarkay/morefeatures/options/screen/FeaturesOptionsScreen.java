@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 @Environment(EnvType.CLIENT)
 public class FeaturesOptionsScreen extends FeaturesScreen {
     private static final MenuButton[] SUB_MENU_BUTTONS = new MenuButton[]{MenuButtons.BREAKAGE_PROTECTION,
-            MenuButtons.LIGHT_ITEM};
+            MenuButtons.LIGHT_ITEM, MenuButtons.KEEP_SLOT_EMPTY};
     private static final Option[] OPTIONS = new Option[]{Options.SHOW_EFFECT_TIME,
             Options.LOCAL_IME, Options.RENDER_BEACON_BEAM};
 

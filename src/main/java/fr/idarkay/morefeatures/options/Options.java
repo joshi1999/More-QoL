@@ -73,4 +73,16 @@ public abstract class Options {
             (options, aDouble) -> options.protectDurability = aDouble.intValue(),
             (options, doubleOption) -> Text.literal(String.valueOf((int) doubleOption.get(options)))
     );
+    public static final DoubleOption SELECTED_SLOT = new DoubleOption(
+            Text.translatable("options.more_features_id.selectedSlot"),
+            1.0d, 9.0, 1.0f,
+            options -> (double) options.selectedSlot,
+            (options, aDouble) -> options.selectedSlot = aDouble.intValue(),
+            (options, doubleOption) -> Text.literal(String.valueOf((int) doubleOption.get(options)))
+    );
+    public static final BooleanOption KEEP_SLOT_EMPTY = new BooleanOption(
+            Text.translatable("options.more_features_id.keepSlotEmpty"),
+            options -> options.keepSlotEmpty,
+            (options, aBoolean) -> options.keepSlotEmpty = aBoolean
+    );
 }
