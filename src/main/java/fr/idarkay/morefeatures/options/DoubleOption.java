@@ -2,10 +2,10 @@ package fr.idarkay.morefeatures.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -19,15 +19,15 @@ public class DoubleOption extends Option {
     private final float step;
     private final Function<FeaturesGameOptions, Double> getter;
     private final BiConsumer<FeaturesGameOptions, Double> setter;
-    private final BiFunction<FeaturesGameOptions, DoubleOption, Text> displayStringGetter;
+    private final BiFunction<FeaturesGameOptions, DoubleOption, Component> displayStringGetter;
 
-    public DoubleOption(MutableText prefix,
+    public DoubleOption(MutableComponent prefix,
                         double min,
                         double max,
                         float step,
                         Function<FeaturesGameOptions, Double> getter,
                         BiConsumer<FeaturesGameOptions, Double> setter,
-                        BiFunction<FeaturesGameOptions, DoubleOption, Text> displayStringGetter) {
+                        BiFunction<FeaturesGameOptions, DoubleOption, Component> displayStringGetter) {
         super(prefix);
         this.min = min;
         this.max = max;
@@ -38,11 +38,11 @@ public class DoubleOption extends Option {
     }
 
     public double getRatio(double value) {
-        return MathHelper.clamp((this.adjust(value) - this.min) / (this.max - this.min), 0.0D, 1.0D);
+        return Mth.clamp((this.adjust(value) - this.min) / (this.max - this.min), 0.0D, 1.0D);
     }
 
     public double getValue(double ratio) {
-        return this.adjust(MathHelper.lerp(MathHelper.clamp(ratio, 0.0D, 1.0D), this.min, this.max));
+        return this.adjust(Mth.lerp(Mth.clamp(ratio, 0.0D, 1.0D), this.min, this.max));
     }
 
     private double adjust(double value) {
@@ -50,7 +50,7 @@ public class DoubleOption extends Option {
             value = (double) (this.step * (float) Math.round(value / (double) this.step));
         }
 
-        return MathHelper.clamp(value, this.min, this.max);
+        return Mth.clamp(value, this.min, this.max);
     }
 
     public double getMin() {
@@ -70,12 +70,12 @@ public class DoubleOption extends Option {
         return getter.apply(options);
     }
 
-    public Text getDisplayString(FeaturesGameOptions options) {
+    public Component getDisplayString(FeaturesGameOptions options) {
         return getDisplayPrefix().copy().append(this.displayStringGetter.apply(options, this));
     }
 
     @Override
-    public ClickableWidget createButton(FeaturesGameOptions options, int x, int y, int width) {
+    public AbstractWidget createButton(FeaturesGameOptions options, int x, int y, int width) {
         return new DoubleSliderWidget(options, x, y, width, 20, this);
     }
 }

@@ -2,20 +2,20 @@ package fr.idarkay.morefeatures.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.MutableText;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.MutableComponent;
 
 @Environment(EnvType.CLIENT)
 public abstract class Option {
-    protected final MutableText prefix;
+    protected final MutableComponent prefix;
 
-    protected Option(MutableText prefix) {
+    protected Option(MutableComponent prefix) {
         this.prefix = prefix;
     }
 
-    public abstract ClickableWidget createButton(FeaturesGameOptions options, int x, int y, int width);
+    public abstract AbstractWidget createButton(FeaturesGameOptions options, int x, int y, int width);
 
-    public MutableText getDisplayPrefix() {
+    public MutableComponent getDisplayPrefix() {
         return prefix;
     }
 }

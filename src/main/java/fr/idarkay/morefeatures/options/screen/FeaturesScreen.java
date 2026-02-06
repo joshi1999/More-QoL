@@ -2,17 +2,17 @@ package fr.idarkay.morefeatures.options.screen;
 
 import fr.idarkay.morefeatures.options.FeaturesGameOptions;
 import fr.idarkay.morefeatures.options.Option;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.GameOptionsScreen;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.options.OptionsSubScreen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.client.gui.components.Button;
 
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class FeaturesScreen extends GameOptionsScreen {
+public abstract class FeaturesScreen extends OptionsSubScreen {
 
     @Nullable
     protected final Screen parent;
@@ -21,9 +21,9 @@ public abstract class FeaturesScreen extends GameOptionsScreen {
     protected final MenuButton[] subMenu;
 
 
-    protected FeaturesScreen(Text title, @Nullable Screen parent, FeaturesGameOptions featuresGameOptions,
+    protected FeaturesScreen(Component title, @Nullable Screen parent, FeaturesGameOptions featuresGameOptions,
                              Option[] options, MenuButton[] subMenu) {
-        super(parent, MinecraftClient.getInstance().options, title);
+        super(parent, Minecraft.getInstance().options, title);
         this.options = options;
         this.subMenu = subMenu == null ? new MenuButton[0] : subMenu;
         this.parent = parent;
@@ -41,33 +41,33 @@ public abstract class FeaturesScreen extends GameOptionsScreen {
             int height = this.height / 6 + 24 * (i >> 1);
             if (j < subMenuLength) {
                 MenuButton menu = this.subMenu[j];
-                this.addDrawableChild(menu.createButton(this, this.option, width, height, 150));
+                this.addRenderableWidget(menu.createButton(this, this.option, width, height, 150));
             } else {
                 Option option = this.options[j - subMenuLength];
-                this.addDrawableChild(option.createButton(this.option, width, height, 150));
+                this.addRenderableWidget(option.createButton(this.option, width, height, 150));
             }
             ++i;
         }
-        ButtonWidget.Builder builder = ButtonWidget.builder(ScreenTexts.DONE, button ->
+        Button.Builder builder = Button.builder(CommonComponents.GUI_DONE, button ->
         {
             this.option.writeChanges();
-            this.client.setScreen(this.parent);
+            this.minecraft.setScreen(this.parent);
         });
-        builder.position(this.width / 2 - 100, this.height / 6 + 24 * (i + 1) / 2);
+        builder.pos(this.width / 2 - 100, this.height / 6 + 24 * (i + 1) / 2);
         builder.width(200);
-        this.addDrawableChild(builder.build());
+        this.addRenderableWidget(builder.build());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         //this.renderBackground(context, mouseX, mouseY, delta);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 15, 16777215);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
         super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
-    public void close() {
-        this.client.setScreen(parent);
+    public void onClose() {
+        this.minecraft.setScreen(parent);
     }
 
 }

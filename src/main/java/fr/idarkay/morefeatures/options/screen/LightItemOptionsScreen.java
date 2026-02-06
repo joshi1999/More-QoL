@@ -3,7 +3,7 @@ package fr.idarkay.morefeatures.options.screen;
 import fr.idarkay.morefeatures.options.FeaturesGameOptions;
 import fr.idarkay.morefeatures.options.Option;
 import fr.idarkay.morefeatures.options.Options;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
 public class LightItemOptionsScreen extends FeaturesScreen {

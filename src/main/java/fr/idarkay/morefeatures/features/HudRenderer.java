@@ -1,11 +1,11 @@
 package fr.idarkay.morefeatures.features;
 
 import fr.idarkay.morefeatures.FeaturesClient;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.logging.Logger;
 
@@ -13,24 +13,24 @@ import java.util.logging.Logger;
  * Renders remaining effect time under the effect icons
  */
 public class HudRenderer {
-    public void render(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+    public void render(GuiGraphics drawContext, DeltaTracker renderTickCounter) {
         if (!FeaturesClient.options().effectTime) {
             return;
         }
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
-        if (client.currentScreen instanceof InventoryScreen) {
+        if (client.screen instanceof InventoryScreen) {
             return;
         }
 
-        boolean hasEffects = !client.player.getStatusEffects().isEmpty();
+        boolean hasEffects = !client.player.getActiveEffects().isEmpty();
         if (!hasEffects) return;
 
         int iconSize = 24;
-        int x = drawContext.getScaledWindowWidth() - iconSize;
+        int x = drawContext.guiWidth() - iconSize;
         int y = 1;
 
-        for (StatusEffectInstance effect : client.player.getStatusEffects()) {
+        for (MobEffectInstance effect : client.player.getActiveEffects()) {
             Logger.getAnonymousLogger().info(effect.toString());
 
             int duration = effect.getDuration();
@@ -40,10 +40,10 @@ public class HudRenderer {
 
             String timeText = String.format("%d:%02d", minutes, seconds);
 
-            int textWidth = client.textRenderer.getWidth(timeText);
+            int textWidth = client.font.width(timeText);
             int centeredX = x + (iconSize - textWidth) / 2;
 
-            drawContext.drawText(client.textRenderer, timeText, centeredX, y + iconSize + 2, 0xFFFFFFFF, true);
+            drawContext.drawString(client.font, timeText, centeredX, y + iconSize + 2, 0xFFFFFFFF, true);
 
             x -= (iconSize + 2);
         }

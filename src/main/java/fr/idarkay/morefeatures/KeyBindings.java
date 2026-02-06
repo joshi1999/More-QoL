@@ -1,41 +1,41 @@
 package fr.idarkay.morefeatures;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public abstract class KeyBindings {
     private static final String MOD_ID = FeaturesMod.MOD_ID;
-    private static final KeyBinding.Category featuresCategory = KeyBinding.Category.create(Identifier.of("key.categories." + MOD_ID));
+    private static final KeyMapping.Category featuresCategory = KeyMapping.Category.register(Identifier.parse("key.categories." + MOD_ID));
 
-    public static final KeyBinding OPEN_OPTIONS_KEYS = new KeyBinding("key." + MOD_ID + ".options",
-            InputUtil.Type.KEYSYM,
+    public static final KeyMapping OPEN_OPTIONS_KEYS = new KeyMapping("key." + MOD_ID + ".options",
+            InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_F,
             featuresCategory);
-    public static final KeyBinding ADD_LOCAL_TIME_KEYS = new KeyBinding("key." + MOD_ID + ".addTime",
-            InputUtil.Type.KEYSYM,
+    public static final KeyMapping ADD_LOCAL_TIME_KEYS = new KeyMapping("key." + MOD_ID + ".addTime",
+            InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_KP_ADD,
             featuresCategory);
-    public static final KeyBinding REMOVE_LOCAL_TIME_KEYS = new KeyBinding("key." + MOD_ID + ".removeTime",
-            InputUtil.Type.KEYSYM,
+    public static final KeyMapping REMOVE_LOCAL_TIME_KEYS = new KeyMapping("key." + MOD_ID + ".removeTime",
+            InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_KP_SUBTRACT,
             featuresCategory);
-    public static final KeyBinding ACTIVE_LOCAL_TIME = new KeyBinding("key." + MOD_ID + ".localTime",
-            InputUtil.Type.KEYSYM,
+    public static final KeyMapping ACTIVE_LOCAL_TIME = new KeyMapping("key." + MOD_ID + ".localTime",
+            InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_J,
             featuresCategory);
-    public static final KeyBinding TOGGLE_BREAK_PROTECTION = new KeyBinding("key." + MOD_ID + ".toggleBreakProtection",
-            InputUtil.UNKNOWN_KEY.getCode(),
+    public static final KeyMapping TOGGLE_BREAK_PROTECTION = new KeyMapping("key." + MOD_ID + ".toggleBreakProtection",
+            InputConstants.UNKNOWN.getValue(),
             featuresCategory);
 
     public static void init() {
-        KeyBindingHelper.registerKeyBinding(OPEN_OPTIONS_KEYS);
-        KeyBindingHelper.registerKeyBinding(ADD_LOCAL_TIME_KEYS);
-        KeyBindingHelper.registerKeyBinding(REMOVE_LOCAL_TIME_KEYS);
-        KeyBindingHelper.registerKeyBinding(ACTIVE_LOCAL_TIME);
-        KeyBindingHelper.registerKeyBinding(TOGGLE_BREAK_PROTECTION);
+        KeyMappingHelper.registerKeyMapping(OPEN_OPTIONS_KEYS);
+        KeyMappingHelper.registerKeyMapping(ADD_LOCAL_TIME_KEYS);
+        KeyMappingHelper.registerKeyMapping(REMOVE_LOCAL_TIME_KEYS);
+        KeyMappingHelper.registerKeyMapping(ACTIVE_LOCAL_TIME);
+        KeyMappingHelper.registerKeyMapping(TOGGLE_BREAK_PROTECTION);
     }
 
 }

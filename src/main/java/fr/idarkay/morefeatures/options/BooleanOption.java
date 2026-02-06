@@ -2,11 +2,11 @@ package fr.idarkay.morefeatures.options;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.*;
 
@@ -16,7 +16,7 @@ public class BooleanOption extends Option {
     private final Predicate<FeaturesGameOptions> getter;
     private final BiConsumer<FeaturesGameOptions, Boolean> setter;
 
-    protected BooleanOption(MutableText prefix, Predicate<FeaturesGameOptions> getter, BiConsumer<FeaturesGameOptions, Boolean> setter) {
+    protected BooleanOption(MutableComponent prefix, Predicate<FeaturesGameOptions> getter, BiConsumer<FeaturesGameOptions, Boolean> setter) {
         super(prefix);
         this.getter = getter;
         this.setter = setter;
@@ -36,19 +36,19 @@ public class BooleanOption extends Option {
     }
 
     @Override
-    public ClickableWidget createButton(FeaturesGameOptions options, int x, int y, int width) {
-        ButtonWidget.Builder builder = ButtonWidget.builder(getDisplayString(options), button ->
+    public AbstractWidget createButton(FeaturesGameOptions options, int x, int y, int width) {
+        Button.Builder builder = Button.builder(getDisplayString(options), button ->
         {
             set(options);
             button.setMessage(getDisplayString(options));
         });
-        builder.position(x, y);
+        builder.pos(x, y);
         builder.width(width);
         return builder.build();
     }
 
-    public Text getDisplayString(FeaturesGameOptions options) {
-        return this.getDisplayPrefix().copy().append(ScreenTexts.onOrOff(this.get(options)));
+    public Component getDisplayString(FeaturesGameOptions options) {
+        return this.getDisplayPrefix().copy().append(CommonComponents.optionStatus(this.get(options)));
     }
 
 }

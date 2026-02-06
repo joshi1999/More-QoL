@@ -4,14 +4,14 @@
   "package": "fr.idarkay.morefeatures.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "PlayerInventoryMixin"
+    "InventoryMixin"
   ],
   "client": [
-    "BeaconBlockEntityRendererMixin",
-    "ClientPlayerInteractionManagerMixin",
+    "BeaconRendererMixin",
+    "MultiPlayerGameModeMixin",
     "ClientWorldPropertiesMixin",
-    "GameOptionsMixin",
-    "HandledScreenMixin"
+    "OptionsMixin",
+    "AbstractContainerScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

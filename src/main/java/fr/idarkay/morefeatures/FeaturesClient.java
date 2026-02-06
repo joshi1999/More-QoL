@@ -10,14 +10,14 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.io.File;
 
@@ -27,8 +27,8 @@ public class FeaturesClient implements ClientModInitializer {
     private static FeaturesGameOptions CONFIG;
 
     //sound
-    public static final Identifier BREAK_SAFE_ID = Identifier.of("more_features_id:break_safe");
-    public static final SoundEvent BREAK_SAFE_EVENT = SoundEvent.of(BREAK_SAFE_ID);
+    public static final Identifier BREAK_SAFE_ID = Identifier.parse("more_features_id:break_safe");
+    public static final SoundEvent BREAK_SAFE_EVENT = SoundEvent.createVariableRangeEvent(BREAK_SAFE_ID);
     public static long LOCAL_TIME = 12000;
     public static boolean isEating = false;
 
@@ -39,8 +39,8 @@ public class FeaturesClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        Registry.register(Registries.SOUND_EVENT, FeaturesClient.BREAK_SAFE_ID, BREAK_SAFE_EVENT);
-        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of(MOD_ID, "before_chat"), new HudRenderer()::render);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, FeaturesClient.BREAK_SAFE_ID, BREAK_SAFE_EVENT);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(MOD_ID, "before_chat"), new HudRenderer()::render);
         KeyBindings.init();
 
         startClientTickEvents();
@@ -49,19 +49,19 @@ public class FeaturesClient implements ClientModInitializer {
     private void startClientTickEvents() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.isPaused()) return;
-            if (KeyBindings.OPEN_OPTIONS_KEYS.isPressed()) {
+            if (KeyBindings.OPEN_OPTIONS_KEYS.isDown()) {
                 client.setScreen(new FeaturesOptionsScreen(null, FeaturesClient.options()));
             } else if (FeaturesClient.options().localTime
-                    && KeyBindings.ADD_LOCAL_TIME_KEYS.isPressed()) {
+                    && KeyBindings.ADD_LOCAL_TIME_KEYS.isDown()) {
                 FeaturesClient.LOCAL_TIME += 500;
             } else if (FeaturesClient.options().localTime
-                    && KeyBindings.REMOVE_LOCAL_TIME_KEYS.isPressed()) {
+                    && KeyBindings.REMOVE_LOCAL_TIME_KEYS.isDown()) {
                     FeaturesClient.LOCAL_TIME -= 500;
             } else if (System.currentTimeMillis() - lastInput > 250) {
-                if (KeyBindings.ACTIVE_LOCAL_TIME.isPressed()) {
+                if (KeyBindings.ACTIVE_LOCAL_TIME.isDown()) {
                     lastInput = System.currentTimeMillis();
                     Options.LOCAL_IME.set(FeaturesClient.options());
-                } else if (KeyBindings.TOGGLE_BREAK_PROTECTION.isPressed()) {
+                } else if (KeyBindings.TOGGLE_BREAK_PROTECTION.isDown()) {
                     lastInput = System.currentTimeMillis();
                     options().breakSafe = !options().breakSafe;
                     lastShown = System.currentTimeMillis();
@@ -72,9 +72,9 @@ public class FeaturesClient implements ClientModInitializer {
             if (System.currentTimeMillis() - lastShown > 3000) {
                 if (options().breakSafeWarning) {
                     if (!options().breakSafe) {
-                        if (client != null && client.player != null && client.player.getMainHandStack() != null) {
-                            ItemStack mainHand = client.player.getMainHandStack();
-                            if (mainHand.isDamageable()) {
+                        if (client != null && client.player != null && client.player.getMainHandItem() != null) {
+                            ItemStack mainHand = client.player.getMainHandItem();
+                            if (mainHand.isDamageableItem()) {
                                 lastShown = System.currentTimeMillis();
                                 String text = "message." + MOD_ID + ".noBreakProtection";
                                 displayInHud(client, text);
@@ -86,9 +86,9 @@ public class FeaturesClient implements ClientModInitializer {
         });
     }
 
-    private void displayInHud(MinecraftClient client, String text) {
-        MutableText mutableText = Text.translatable(text);
-        client.getMessageHandler().onGameMessage(mutableText, true); //Util.NIL_UUID
+    private void displayInHud(Minecraft client, String text) {
+        MutableComponent mutableText = Component.translatable(text);
+        client.getChatListener().handleSystemMessage(mutableText, true); //Util.NIL_UUID
     }
 
     public static FeaturesGameOptions options() {

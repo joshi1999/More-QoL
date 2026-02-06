@@ -6,7 +6,7 @@ import fr.idarkay.morefeatures.options.Option;
 import fr.idarkay.morefeatures.options.Options;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
