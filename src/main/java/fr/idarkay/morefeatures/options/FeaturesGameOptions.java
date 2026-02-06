@@ -21,11 +21,13 @@ public class FeaturesGameOptions {
     public boolean localTime = false;
     public boolean renderBeaconBeam = true;
     public boolean lightSameItem = true;
+    public boolean keepSlotEmpty = false;
     public int rLightSameItem = 0xFF;
     public int gLightSameItem = 0x0;
     public int bLightSameItem = 0x0;
     public int aLightSameItem = 0xA0;
     public int protectDurability = 10;
+    public int selectedSlot = 1;
 
     @Exclude
     private File saveFile;
