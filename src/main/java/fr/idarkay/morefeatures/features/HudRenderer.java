@@ -19,7 +19,7 @@ public class HudRenderer {
         }
         Minecraft client = Minecraft.getInstance();
         if (client.player == null) return;
-        if (client.screen instanceof InventoryScreen) {
+        if (client.gui.screen() instanceof InventoryScreen) {
             return;
         }
 

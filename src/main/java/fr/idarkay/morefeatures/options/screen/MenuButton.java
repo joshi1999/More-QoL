@@ -22,7 +22,7 @@ public class MenuButton {
 
     public AbstractWidget createButton(@Nullable Screen parent, FeaturesGameOptions options, int x, int y, int width) {
         Button.Builder builder = Button.builder(this.name, button ->
-                Minecraft.getInstance().setScreen(creator.apply(parent, options)));
+                Minecraft.getInstance().gui.setScreen(creator.apply(parent, options)));
         return builder.pos(x, y).width(width).build();
     }
 

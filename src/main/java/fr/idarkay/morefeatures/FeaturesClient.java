@@ -50,7 +50,7 @@ public class FeaturesClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.isPaused()) return;
             if (KeyBindings.OPEN_OPTIONS_KEYS.isDown()) {
-                client.setScreen(new FeaturesOptionsScreen(null, FeaturesClient.options()));
+                client.gui.setScreen(new FeaturesOptionsScreen(null, FeaturesClient.options()));
             } else if (FeaturesClient.options().localTime
                     && KeyBindings.ADD_LOCAL_TIME_KEYS.isDown()) {
                 FeaturesClient.LOCAL_TIME += 500;
@@ -88,7 +88,8 @@ public class FeaturesClient implements ClientModInitializer {
 
     private void displayInHud(Minecraft client, String text) {
         MutableComponent mutableText = Component.translatable(text);
-        client.getChatListener().handleSystemMessage(mutableText, true); //Util.NIL_UUID
+        // 26.2: HUD methods moved to Minecraft.gui.hud; show the message in the action bar
+        client.gui.hud.setOverlayMessage(mutableText, false);
     }
 
     public static FeaturesGameOptions options() {

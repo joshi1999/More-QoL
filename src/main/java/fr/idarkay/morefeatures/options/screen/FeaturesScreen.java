@@ -51,7 +51,7 @@ public abstract class FeaturesScreen extends OptionsSubScreen {
         Button.Builder builder = Button.builder(CommonComponents.GUI_DONE, button ->
         {
             this.option.writeChanges();
-            this.minecraft.setScreen(this.parent);
+            this.minecraft.gui.setScreen(this.parent);
         });
         builder.pos(this.width / 2 - 100, this.height / 6 + 24 * (i + 1) / 2);
         builder.width(200);
@@ -67,7 +67,7 @@ public abstract class FeaturesScreen extends OptionsSubScreen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(parent);
+        this.minecraft.gui.setScreen(parent);
     }
 
 }
